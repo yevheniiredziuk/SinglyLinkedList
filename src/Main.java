@@ -16,5 +16,11 @@ public class Main {
         System.out.println("first: " + ints.getFirst());
         System.out.println("last: " + ints.getLast());
         System.out.println("full list: " + ints);
+
+
+        // iterable in action
+        for(int i : ints) {
+            System.out.println(i);
+        }
     }
 }

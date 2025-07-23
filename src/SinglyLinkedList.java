@@ -1,6 +1,8 @@
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class SinglyLinkedList<T> {
+public class SinglyLinkedList<T> implements Iterable<T> {
+
 
     private static class Node<T> {
         T info;
@@ -166,6 +168,29 @@ public class SinglyLinkedList<T> {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<>() {
+            Node<T> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T info = current.info;
+                current = current.next;
+                return info;
+            }
+        };
     }
 
 }
