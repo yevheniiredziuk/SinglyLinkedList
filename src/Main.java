@@ -9,7 +9,12 @@ public class Main {
         ints.remove(1);
         System.out.println("remove first: " + ints.removeFirst());
         System.out.println("remove last: " + ints.removeLast());
-        System.out.println(ints);
-        System.out.println(ints.size());
+        System.out.println("full list: " + ints);
+
+        ints.add(10);
+        System.out.println("size: " + ints.size());
+        System.out.println("first: " + ints.getFirst());
+        System.out.println("last: " + ints.getLast());
+        System.out.println("full list: " + ints);
     }
 }

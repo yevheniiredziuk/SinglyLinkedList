@@ -1,3 +1,5 @@
+import java.util.NoSuchElementException;
+
 public class SinglyLinkedList<T> {
 
     private static class Node<T> {
@@ -24,73 +26,52 @@ public class SinglyLinkedList<T> {
         Node<T> newNode = new Node<>(info);
         size++;
         if (head == null) {
-            head = newNode;
-            tail = newNode;
+            head = tail = newNode;
             return;
         }
         newNode.next = head;
         head = newNode;
-
     }
+
 
     public void addLast(T info) {
         Node<T> newNode = new Node<>(info);
         if (head == null) {
-            addFirst(info);
-            return;
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
         }
-        Node<T> prev = head;
-        while (prev.next != null) {
-            prev = prev.next;
-        }
-        prev.next = newNode;
-        tail = newNode;
         size++;
     }
 
+
     public void add(T info) {
-        Node<T> newNode = new Node<>(info);
-        if (head == null) {
-            addFirst(info);
-            return;
-        }
-        if(head == tail) {
-            addLast(info);
-            return;
-        }
-        Node<T> prev = head;
-        while (prev.next != null) {
-            prev = prev.next;
-        }
-        prev.next = newNode;
-        tail = newNode;
-        size++;
+       addLast(info);
     }
 
     public void add(int index, T info) {
-        if(isEmpty()){
-            throw new IllegalStateException("List is empty");
-        }
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
-        Node<T> newNode = new Node<>(info);
         if (index == 0) {
             addFirst(info);
             return;
         }
-        if (index == size - 1) {
+        if (index == size) {
             addLast(info);
             return;
         }
         Node<T> prev = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index - 1; i++) {
             prev = prev.next;
         }
+        Node<T> newNode = new Node<>(info);
         newNode.next = prev.next;
         prev.next = newNode;
         size++;
     }
+
 
     public T get(int index) {
         if (index < 0 || index >= size) {
@@ -127,58 +108,64 @@ public class SinglyLinkedList<T> {
 
     public T removeFirst() {
         if (isEmpty()) {
-            throw new IllegalStateException("List is empty");
+            throw new NoSuchElementException("List is empty");
         }
-        Node<T> node = head;
+        T info = head.info;
         head = head.next;
         size--;
-        return node.info;
+        if (head == null) { // список став порожнім
+            tail = null;
+        }
+        return info;
     }
 
     public T removeLast() {
         if (isEmpty()) {
-            throw new IllegalStateException("List is empty");
+            throw new NoSuchElementException("List is empty");
         }
-        if (head == tail) {
-            if(!isEmpty()) {
-                return  removeFirst();
-            }
+        if (head == tail) { // лише 1 елемент
+            return removeFirst();
         }
-
-        T info = remove(size - 1);
+        Node<T> prev = head;
+        while (prev.next != tail) {
+            prev = prev.next;
+        }
+        T info = tail.info;
+        tail = prev;
+        tail.next = null;
+        size--;
         return info;
     }
 
     public T remove(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index: " + index);
         }
-        Node<T> node = head;
-        for (int i = 0; i < index -1; i++) {
-            node = node.next;
+        if (index == 0) return removeFirst();
+        if (index == size - 1) return removeLast();
+
+        Node<T> prev = head;
+        for (int i = 0; i < index - 1; i++) {
+            prev = prev.next;
         }
-        Node<T> current = node.next;
-        node.next = current.next;
+        T info = prev.next.info;
+        prev.next = prev.next.next;
         size--;
-        return current.info;
+        return info;
     }
+
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        StringBuilder sb = new StringBuilder("[");
         Node<T> node = head;
         while (node != null) {
             sb.append(node.info);
-            if(node.next != null) {
-                sb.append(", ");
-               // node = node.next;
-            } else
-                break;
+            if (node.next != null) sb.append(", ");
             node = node.next;
         }
-
         sb.append("]");
         return sb.toString();
     }
+
 }
