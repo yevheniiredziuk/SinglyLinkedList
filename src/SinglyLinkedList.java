@@ -139,10 +139,14 @@ public class SinglyLinkedList<T> {
         if (isEmpty()) {
             throw new IllegalStateException("List is empty");
         }
-        Node<T> node = tail;
-        tail = tail.next;
-        size--;
-        return node.info;
+        if (head == tail) {
+            if(!isEmpty()) {
+                return  removeFirst();
+            }
+        }
+
+        T info = remove(size - 1);
+        return info;
     }
 
     public T remove(int index) {
