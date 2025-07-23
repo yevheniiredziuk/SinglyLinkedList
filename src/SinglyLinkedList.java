@@ -47,6 +47,24 @@ public class SinglyLinkedList<T> {
         tail = newNode;
         size++;
     }
+
+    public void add(T info) {
+        Node<T> newNode = new Node<>(info);
+        if (head == null) {
+            addFirst(info);
+        }
+        if(head == tail) {
+            addLast(info);
+        }
+        Node<T> prev = head;
+        while (prev.next != null) {
+            prev = prev.next;
+        }
+        prev.next = newNode;
+        tail = newNode;
+        size++;
+    }
+
     public void add(int index, T info) {
         if(isEmpty()){
             throw new IllegalStateException("List is empty");
