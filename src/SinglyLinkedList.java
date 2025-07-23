@@ -52,9 +52,11 @@ public class SinglyLinkedList<T> {
         Node<T> newNode = new Node<>(info);
         if (head == null) {
             addFirst(info);
+            return;
         }
         if(head == tail) {
             addLast(info);
+            return;
         }
         Node<T> prev = head;
         while (prev.next != null) {
@@ -75,9 +77,11 @@ public class SinglyLinkedList<T> {
         Node<T> newNode = new Node<>(info);
         if (index == 0) {
             addFirst(info);
+            return;
         }
         if (index == size - 1) {
             addLast(info);
+            return;
         }
         Node<T> prev = head;
         for (int i = 0; i < index; i++) {
@@ -146,12 +150,31 @@ public class SinglyLinkedList<T> {
             throw new IndexOutOfBoundsException();
         }
         Node<T> node = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index -1; i++) {
             node = node.next;
         }
         Node<T> current = node.next;
         node.next = current.next;
         size--;
         return current.info;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<T> node = head;
+        while (node != null) {
+            sb.append(node.info);
+            if(node.next != null) {
+                sb.append(", ");
+               // node = node.next;
+            } else
+                break;
+            node = node.next;
+        }
+
+        sb.append("]");
+        return sb.toString();
     }
 }
